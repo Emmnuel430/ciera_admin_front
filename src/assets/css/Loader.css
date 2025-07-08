@@ -1,0 +1,48 @@
+/* HTML: <div class="loader"></div> */
+.loader {
+  display: flex;
+  gap: 0.1em;
+  font-family: monospace;
+  font-size: 3em;
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+.loader span {
+  animation: bounce 1.4s infinite;
+  display: inline-block;
+}
+
+.loader span:nth-child(1) {
+  animation-delay: 0s;
+}
+.loader span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.loader span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.loader span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.loader span:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.loader span:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.loader span:nth-child(7) {
+  animation-delay: 0.6s;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* #0d6efd */

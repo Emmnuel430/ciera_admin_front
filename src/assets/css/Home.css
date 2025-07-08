@@ -1,0 +1,346 @@
+/* ----------------------------------------
+   Variables globales
+---------------------------------------- */
+:root {
+  --primary: #0d6efd;
+  --light: #f3f6f9;
+  --dark: #191c24;
+}
+
+/* ----------------------------------------
+   Styles généraux
+---------------------------------------- */
+/* img {
+  width: 40px;
+  height: 40px;
+} */
+
+.b-bar {
+  flex-direction: column;
+}
+
+/* ----------------------------------------
+   Bouton "Back to Top"
+---------------------------------------- */
+.back-to-top {
+  position: fixed;
+  display: none;
+  right: 45px;
+  bottom: 45px;
+  z-index: 99;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.back-to-top.show {
+  display: inline-flex; /* Visible quand la classe "show" est ajoutée */
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ----------------------------------------
+   Boutons
+---------------------------------------- */
+.btn {
+  transition: 0.5s;
+}
+
+.btn.btn-primary {
+  color: #fff;
+}
+
+.btn-square {
+  width: 38px;
+  height: 38px;
+}
+
+.btn-sm-square {
+  width: 32px;
+  height: 32px;
+}
+
+.btn-lg-square {
+  width: 48px;
+  height: 48px;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+  padding: 0;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-weight: normal;
+  border-radius: 50px !important;
+}
+
+/* ----------------------------------------
+   Dropdown Menu
+---------------------------------------- */
+.dropdown-menu {
+  max-height: 0;
+  overflow: hidden; /* Cache le contenu dépassant la hauteur */
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  position: absolute;
+  right: -20px;
+}
+
+.dropdown.show .dropdown-menu {
+  max-height: 500px; /* Limite haute arbitraire */
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+}
+
+.dropdown-item {
+  padding-left: 25px;
+  border-radius: 0 30px 30px 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* ----------------------------------------
+   Sidebar
+---------------------------------------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  overflow-y: auto; /* Permet le défilement si le contenu dépasse la hauteur */
+  height: 100vh;
+  background: var(--light);
+  transition: 0.5s;
+  z-index: 999;
+}
+
+/* ----------------------------------------
+   Navbar dans la Sidebar
+---------------------------------------- */
+.sidebar .navbar .navbar-nav .nav-link {
+  padding: 7px 20px;
+  color: var(--dark);
+  font-weight: 500;
+  border-left: 3px solid var(--dark);
+  border-radius: 0 30px 30px 0;
+  outline: none;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover,
+.sidebar .navbar .navbar-nav .nav-link.active {
+  color: var(--bs-primary);
+  background-color: var(--bs-secondary-bg); /* s'adapte automatiquement */
+  border-left: 4px solid var(--bs-primary); /* exemple visuel */
+  /* font-weight: bold; */
+}
+
+.sidebar .navbar .navbar-nav .nav-link i {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 40px;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover i,
+.sidebar .navbar .navbar-nav .nav-link.active i {
+  background: var(--light);
+}
+
+/* ----------------------------------------
+   Dropdown dans la Sidebar
+---------------------------------------- */
+.sidebar .navbar .dropdown-toggle::after {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  border: none;
+  content: "\f107";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  transition: 0.5s;
+}
+
+.sidebar .navbar .dropdown-item {
+  padding-left: 25px;
+  border-radius: 0 30px 30px 0;
+}
+
+/* ----------------------------------------
+   Navbar dans le contenu principal
+---------------------------------------- */
+.content .navbar .navbar-nav .nav-link {
+  margin-left: 25px;
+  padding: 12px 0;
+  color: var(--dark);
+  outline: none;
+}
+
+.content .navbar .navbar-nav .nav-link:hover,
+.content .navbar .navbar-nav .nav-link.active {
+  color: var(--primary);
+}
+
+.content .navbar .sidebar.toggler,
+.content .navbar .navbar-nav .nav-link i {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 40px;
+}
+
+.content .navbar .dropdown-toggle::after {
+  vertical-align: middle;
+  border: none;
+  content: "\f107";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  transition: 0.5s;
+}
+
+/* ----------------------------------------
+   Ajustements pour petits écrans
+---------------------------------------- */
+@media (max-width: 575.98px) {
+  .content .navbar .navbar-nav .nav-link {
+    margin-left: 15px;
+  }
+}
+
+/* ----------------------------------------
+   Contenu principal
+---------------------------------------- */
+.content {
+  margin-left: 250px;
+  min-height: 100vh;
+  background: #fff;
+  transition: 0.5s;
+}
+
+/* ----------------------------------------
+   Décalage du contenu avec la Sidebar
+---------------------------------------- */
+.content.shifted {
+  margin-left: 250px;
+  transition: margin-left 0.5s ease;
+}
+
+@media (max-width: 1109.98px) {
+  .content.shifted {
+    margin-left: 0;
+  }
+}
+
+/* ----------------------------------------
+   Media Queries
+---------------------------------------- */
+@media (min-width: 1110px) {
+  .sidebar {
+    margin-left: 0;
+    transition: 0.5s;
+  }
+  .sidebar.open {
+    margin-left: -250px;
+  }
+  .content {
+    width: 100%;
+    margin-left: 0;
+    transition: 0.5s;
+  }
+  .content .open {
+    width: 100%;
+    margin-left: 0;
+  }
+  .items {
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 1109.98px) {
+  .sidebar {
+    margin-left: -250px;
+  }
+  .sidebar.open {
+    margin-left: 0;
+  }
+  .content {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* ----------------------------------------
+   Dropdown toggle
+---------------------------------------- */
+.navbar .dropdown.show .dropdown-toggle::after {
+  transform: rotate(-180deg); /* Rotation de 180 degrés */
+}
+
+/* ----------------------------------------
+   Scrollbars personnalisés
+---------------------------------------- */
+/* WebKit (Chrome, Edge, Safari) */
+.sidebar::-webkit-scrollbar {
+  width: 10px; /* Largeur de la scrollbar */
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de l'arrière-plan de la scrollbar */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #888; /* Couleur de la "poignée" de la scrollbar */
+  border-radius: 5px; /* Arrondi des coins */
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Couleur au survol */
+}
+
+/* Firefox */
+.sidebar {
+  scrollbar-width: thin; /* Largeur fine */
+  scrollbar-color: #888 #f1f1f1; /* Poignée et fond */
+}
+
+/* ----------------------------------------
+   Conteneur récapitulatif
+---------------------------------------- */
+.recap-container {
+  max-width: 1000px; /* Ajuste selon ton besoin */
+  margin: auto; /* Centre l'élément */
+}
+
+/* ----------------------------------------
+   Effet disabled
+---------------------------------------- */
+.table-row-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Ajoutez ceci dans le fichier CSS global ou spécifique */
+.hover-shadow {
+  transition: box-shadow 0.3s ease;
+}
+.hover-shadow:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}

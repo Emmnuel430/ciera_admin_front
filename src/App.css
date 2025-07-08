@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", consolas;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.table-operations {
+  text-align: center; /* Centre le contenu */
+}
+
+.centered-table td,
+.centered-table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+th,
+td {
+  white-space: nowrap; /* Empêche le contenu de s'étirer sur plusieurs lignes */
+}
+
+@media (max-width: 1200.98px) {
+  td {
+    white-space: nowrap; /* Empêche le contenu de s'étirer sur plusieurs lignes */
+  }
+}
+
+@media (max-width: 991.98px) {
+  .userImg {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+.userImg {
+  width: 100%;
+  height: 100%;
+}
+
+.fw {
+  font-weight: 700;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.hover-border-success:hover {
+  border-color: #198754 !important; /* Bootstrap success color */
+}
