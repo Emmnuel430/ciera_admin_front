@@ -33,9 +33,9 @@ const Login = () => {
     try {
       let item = { pseudo, password };
       // 1) Récupérer le cookie CSRF (obligatoire pour Sanctum)
-      await fetch(`${process.env.REACT_APP_API_URL}/sanctum/csrf-cookie`, {
-        credentials: "include",
-      });
+      // await fetch(`${process.env.REACT_APP_API_URL}/sanctum/csrf-cookie`, {
+      //   credentials: "include",
+      // });
 
       let result = await fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
         method: "POST",
@@ -58,6 +58,7 @@ const Login = () => {
 
       // Stocke les informations utilisateur si la connexion réussit
       sessionStorage.setItem("user-info", JSON.stringify(result.user));
+      sessionStorage.setItem("token", result.token);
 
       setLoading(false); // Désactive l'état de chargement
       navigate("/admin-gest/home");

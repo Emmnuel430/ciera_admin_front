@@ -5,7 +5,7 @@ import Layout from "../../components/Layout/Layout";
 import Back from "../../components/Layout/Back";
 import ConfirmPopup from "../../components/Layout/ConfirmPopup"; // Importation du modal de confirmation
 import ToastMessage from "../../components/Layout/ToastMessage";
-import { fetchWithCredentials } from "../../utils/fetchWithCredentials"; // Importation d'une fonction utilitaire pour les requêtes avec token
+import { fetchWithToken } from "../../utils/fetchWithToken"; // Importation d'une fonction utilitaire pour les requêtes avec token
 import Select from "react-select";
 
 const AddPage = () => {
@@ -301,7 +301,7 @@ const AddPage = () => {
         });
       });
 
-      const response = await fetchWithCredentials(
+      const response = await fetchWithToken(
         `${process.env.REACT_APP_API_BASE_URL}/pages`,
         {
           method: "POST",

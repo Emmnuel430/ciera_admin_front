@@ -6,7 +6,7 @@ const ConfirmPopup = ({
   onConfirm,
   title,
   body,
-  btnColor,
+  btnColor = "danger",
   confirmText = "Confirmer",
   cancelText = "Annuler",
 }) => {

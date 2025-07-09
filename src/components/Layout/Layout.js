@@ -17,6 +17,7 @@ const Layout = ({ children }) => {
 
   // Récupération des informations de l'utilisateur depuis le sessionStorage (si elles existent)
   let user = JSON.parse(sessionStorage.getItem("user-info"));
+  let token = sessionStorage.getItem("token");
   const [load, setLoad] = useState(false);
 
   // Utilisation de 'useNavigate' pour effectuer des redirections dans l'application
@@ -25,21 +26,27 @@ const Layout = ({ children }) => {
   // Fonction de déconnexion qui efface les informations de l'utilisateur du sessionStorage et redirige vers la page de connexion
   async function logOut() {
     try {
+      setLoad(true);
       await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout`, {
         method: "POST",
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        // credentials: "include",
       });
+
       sessionStorage.removeItem("user-info");
+      sessionStorage.removeItem("token");
       window.location.href = "/";
     } catch (error) {
       console.error("Erreur de déconnexion :", error);
     } finally {
       setLoad(false);
     }
-    // Redirection
-    navigate("/");
     // Nettoyage du sessionStorage
     sessionStorage.clear();
+    // Redirection
+    navigate("/");
   }
 
   return (

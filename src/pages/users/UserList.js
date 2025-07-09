@@ -6,7 +6,7 @@ import HeaderWithFilter from "../../components/Layout/HeaderWithFilter"; // Comp
 import Loader from "../../components/Layout/Loader"; // Composant pour le loader
 import ConfirmPopup from "../../components/Layout/ConfirmPopup"; // Composant de modal de confirmation pour la suppression d'utilisateur
 import SearchBar from "../../components/Layout/SearchBar"; // Composant pour la barre de recherche
-import { fetchWithCredentials } from "../../utils/fetchWithCredentials"; // Importation d'une fonction utilitaire pour les requêtes avec token
+import { fetchWithToken } from "../../utils/fetchWithToken"; // Importation d'une fonction utilitaire pour les requêtes avec token
 
 const UserList = () => {
   // États locaux pour gérer les utilisateurs, l'état de chargement, les erreurs et les modals
@@ -32,7 +32,7 @@ const UserList = () => {
 
       try {
         // Requête pour récupérer la liste des utilisateurs
-        const response = await fetchWithCredentials(
+        const response = await fetchWithToken(
           `${process.env.REACT_APP_API_BASE_URL}/liste_user`
         );
         if (!response.ok) {
@@ -68,7 +68,7 @@ const UserList = () => {
 
     try {
       // Requête DELETE pour supprimer l'utilisateur
-      const response = await fetchWithCredentials(
+      const response = await fetchWithToken(
         `${process.env.REACT_APP_API_BASE_URL}/delete_user/${selectedUser.id}?user_id=${userId}`,
         {
           method: "DELETE", // Méthode de suppression

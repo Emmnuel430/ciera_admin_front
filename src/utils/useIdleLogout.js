@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchWithToken } from "./fetchWithToken";
 
 const useIdleLogout = (timeoutMinutes = 15) => {
   const navigate = useNavigate();
@@ -7,12 +8,8 @@ const useIdleLogout = (timeoutMinutes = 15) => {
 
   const logout = useCallback(async () => {
     try {
-      await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout`, {
+      await fetchWithToken(`${process.env.REACT_APP_API_BASE_URL}/logout`, {
         method: "POST",
-        credentials: "include", // important : envoie le cookie de session
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
     } catch (err) {
       console.error("Erreur lors de la déconnexion automatique :", err);

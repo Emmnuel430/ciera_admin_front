@@ -5,7 +5,7 @@ import Back from "../../components/Layout/Back";
 import ConfirmPopup from "../../components/Layout/ConfirmPopup";
 import ToastMessage from "../../components/Layout/ToastMessage";
 // import SectionForm from "./SectionForm";
-import { fetchWithCredentials } from "../../utils/fetchWithCredentials"; // Importation d'une fonction utilitaire pour les requêtes avec token
+import { fetchWithToken } from "../../utils/fetchWithToken"; // Importation d'une fonction utilitaire pour les requêtes avec token
 import { useSectionFocus } from "./useSectionFocus";
 import Select from "react-select";
 
@@ -34,7 +34,7 @@ export default function EditPage() {
 
   useEffect(() => {
     // Charger les données existantes
-    fetchWithCredentials(`${process.env.REACT_APP_API_BASE_URL}/pages/${id}`)
+    fetchWithToken(`${process.env.REACT_APP_API_BASE_URL}/pages/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setPage({
@@ -381,7 +381,7 @@ export default function EditPage() {
     });
 
     try {
-      const res = await fetchWithCredentials(
+      const res = await fetchWithToken(
         `${process.env.REACT_APP_API_BASE_URL}/pages/${id}`,
         {
           method: "POST",

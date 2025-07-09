@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import ToastMessage from "../../components/Layout/ToastMessage";
-import { fetchWithCredentials } from "../../utils/fetchWithCredentials";
+import { fetchWithToken } from "../../utils/fetchWithToken";
 import Loader from "../../components/Layout/Loader"; // Composant pour le loader
 
 const Parametres = () => {
@@ -21,7 +21,7 @@ const Parametres = () => {
     const fetchSettings = async () => {
       setLoad(true);
       try {
-        const res = await fetchWithCredentials(
+        const res = await fetchWithToken(
           `${process.env.REACT_APP_API_BASE_URL}/settings`
         );
         const data = await res.json();
@@ -98,7 +98,7 @@ const Parametres = () => {
     });
 
     try {
-      const response = await fetchWithCredentials(
+      const response = await fetchWithToken(
         `${process.env.REACT_APP_API_BASE_URL}/settings`,
         {
           method: "POST",

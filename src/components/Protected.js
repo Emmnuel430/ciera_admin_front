@@ -10,10 +10,11 @@ const Protected = ({ Cmp, adminOnly = false }) => {
     if (excludedPaths.includes(window.location.pathname)) return;
 
     const userInfo = sessionStorage.getItem("user-info");
+    const token = sessionStorage.getItem("token");
     const user = userInfo ? JSON.parse(userInfo) : null;
 
-    if (!user) {
-      sessionStorage.removeItem("user-info");
+    if (!user || !token) {
+      sessionStorage.clear();
       navigate("/");
       return;
     }
@@ -25,10 +26,10 @@ const Protected = ({ Cmp, adminOnly = false }) => {
           {
             method: "GET",
             headers: {
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
               Accept: "application/json",
             },
-            credentials: "include", // important : envoie cookie de session
           }
         );
 
