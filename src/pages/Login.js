@@ -32,10 +32,6 @@ const Login = () => {
     // Appel à l'API pour tenter la connexion
     try {
       let item = { pseudo, password };
-      // 1) Récupérer le cookie CSRF (obligatoire pour Sanctum)
-      // await fetch(`${process.env.REACT_APP_API_URL}/sanctum/csrf-cookie`, {
-      //   credentials: "include",
-      // });
 
       let result = await fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
         method: "POST",
@@ -43,7 +39,6 @@ const Login = () => {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        credentials: "include", // Important pour envoyer cookie avec la requête
         body: JSON.stringify(item),
       });
 
