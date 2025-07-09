@@ -15,7 +15,6 @@ const useIdleLogout = (timeoutMinutes = 15) => {
       console.error("Erreur lors de la déconnexion automatique :", err);
     }
 
-    // Nettoyage local
     sessionStorage.clear();
 
     navigate("/");
@@ -33,7 +32,7 @@ const useIdleLogout = (timeoutMinutes = 15) => {
       window.addEventListener(event, resetTimer);
     });
 
-    resetTimer(); // Initialise le timer
+    resetTimer();
 
     return () => {
       events.forEach((event) => {

@@ -14,7 +14,7 @@ const Login = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem("user-info")) {
-      navigate("/admin-gest/home"); // Redirige si l'utilisateur est déjà connecté
+      navigate("/admin-gest/home");
     }
   }, [navigate]);
 
