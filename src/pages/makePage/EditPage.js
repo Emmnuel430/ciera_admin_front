@@ -8,8 +8,10 @@ import ToastMessage from "../../components/Layout/ToastMessage";
 import { fetchWithToken } from "../../utils/fetchWithToken"; // Importation d'une fonction utilitaire pour les requêtes avec token
 import { useSectionFocus } from "./useSectionFocus";
 import Select from "react-select";
+import useSelectTheme from "./useSelectTheme";
 
 export default function EditPage() {
+  const { customTheme } = useSelectTheme();
   const { id } = useParams();
   const navigate = useNavigate();
   const [page, setPage] = useState({
@@ -966,6 +968,7 @@ export default function EditPage() {
                               )
                             }
                             isClearable
+                            theme={customTheme}
                             formatOptionLabel={({ label, value }) => (
                               <div className="flex items-center gap-2">
                                 <i className={`${value} me-2`} />

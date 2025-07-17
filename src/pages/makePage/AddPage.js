@@ -7,8 +7,10 @@ import ConfirmPopup from "../../components/Layout/ConfirmPopup"; // Importation 
 import ToastMessage from "../../components/Layout/ToastMessage";
 import { fetchWithToken } from "../../utils/fetchWithToken"; // Importation d'une fonction utilitaire pour les requêtes avec token
 import Select from "react-select";
+import useSelectTheme from "./useSelectTheme";
 
 const AddPage = () => {
+  const { customTheme } = useSelectTheme();
   const [error, setError] = useState(""); // Message d'erreur en cas de problème
   const [page, setPage] = useState({
     title: "",
@@ -783,6 +785,7 @@ const AddPage = () => {
                               )
                             }
                             isClearable
+                            theme={customTheme}
                             formatOptionLabel={({ label, value }) => (
                               <div className="flex items-center gap-2">
                                 <i className={`${value} me-2`} />

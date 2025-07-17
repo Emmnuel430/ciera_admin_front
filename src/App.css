@@ -53,3 +53,16 @@ td {
 .hover-border-success:hover {
   border-color: #198754 !important; /* Bootstrap success color */
 }
+
+/* Pour forcer toutes les cards à la même hauteur */
+.product-card {
+  height: 100%;
+  min-height: 350px; /* ajuste selon ton besoin */
+  display: flex;
+  flex-direction: column;
+}
+.product-card .card-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}

@@ -161,13 +161,17 @@ const Pages = () => {
             <div className="row">
               {filteredPage.length > 0 ? (
                 filteredPage
-                  // .sort(
-                  //   (a, b) => new Date(b.updated_at) - new Date(a.updated_at)
-                  // )
+                  .sort((a, b) => {
+                    return Number(b.is_active) - Number(a.is_active);
+                  })
                   .map((page) => (
                     <div className="col-md-6 col-lg-4 mb-4" key={page.id}>
-                      <Card className="h-100 shadow border">
-                        <Card.Body className="d-flex flex-column justify-content-between">
+                      <Card className={`h-100 shadow border`}>
+                        <Card.Body
+                          className={`d-flex flex-column justify-content-between ${
+                            !page.is_active ? "opacity-50" : ""
+                          }`}
+                        >
                           {/* Titre et Ordre */}
                           <div className="d-flex justify-content-between align-items-start mb-3">
                             <div>
@@ -178,9 +182,15 @@ const Pages = () => {
                                 {page.subtitle || "Aucun sous-titre"}
                               </Card.Subtitle>
                             </div>
-                            <span className="badge bg-secondary rounded-pill">
-                              P {page.order + 1}
-                            </span>
+                            {!page.is_active ? (
+                              <span className="badge bg-danger rounded-pill">
+                                OFF
+                              </span>
+                            ) : (
+                              <span className="badge bg-secondary rounded-pill">
+                                P {page.order + 1}
+                              </span>
+                            )}
                           </div>
 
                           {/* Infos sections */}
@@ -189,7 +199,9 @@ const Pages = () => {
                               <div>
                                 <i className="bi bi-diagram-3-fill me-2 text-primary"></i>
                                 <strong>Sections :</strong>{" "}
-                                {page.sections?.length || 0}
+                                {page.sections?.filter((sec) => sec.is_active)
+                                  ?.length || 0}
+                                /{page.sections?.length || 0}
                               </div>
                               <div>
                                 <i className="bi bi-files me-2 text-success"></i>

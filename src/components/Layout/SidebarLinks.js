@@ -38,6 +38,19 @@ const SidebarLinks = ({ user }) => {
             <i className="fa fa-users me-2"></i>
             <span className="text-body">Utilisateurs</span>
           </Link>
+
+          <Link
+            to="/admin-gest/produits"
+            className={`nav-link d-flex align-items-center ${
+              isActive("/admin-gest/produits") ||
+              isActive("/admin-gest/produit/add")
+                ? "active bg-body-secondary fw-bold"
+                : ""
+            }`}
+          >
+            <i className="fa fa-box-open me-2"></i>
+            <span className="text-body">Produits</span>
+          </Link>
         </>
       )}
       <>

@@ -19,6 +19,9 @@ import Settings from "./pages/settings/SettingsList";
 
 // ----
 import ScrollToTop from "./components/ScrollToTop";
+import ProductsList from "./pages/ecom/ProductsList";
+import AddProduct from "./pages/ecom/AddProduct";
+import ProductUpdate from "./pages/ecom/ProductUpdate";
 
 const AppRoutes = () => {
   return (
@@ -48,6 +51,20 @@ const AppRoutes = () => {
           element={<Protected Cmp={UserUpdate} adminOnly />}
         />
 
+        {/* Produits (Super Admin uniquement) */}
+        <Route
+          path="/admin-gest/produit/add"
+          element={<Protected Cmp={AddProduct} adminOnly />}
+        />
+        <Route
+          path="/admin-gest/produits"
+          element={<Protected Cmp={ProductsList} adminOnly />}
+        />
+        <Route
+          path="/admin-gest/produits/edit/:id"
+          element={<Protected Cmp={ProductUpdate} adminOnly />}
+        />
+
         {/* ------------------------ */}
 
         {/* Liste des pages */}
@@ -61,7 +78,7 @@ const AppRoutes = () => {
 
         {/* ------------------------ */}
 
-        {/* Logs */}
+        {/* Setings */}
         <Route
           path="/admin-gest/settings"
           element={<Protected Cmp={Settings} adminOnly />}

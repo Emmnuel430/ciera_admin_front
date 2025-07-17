@@ -32,7 +32,7 @@ const Parametres = () => {
         });
 
         setSettings(formatted);
-        console.log(data);
+        // console.log(data);
 
         setInitialSettings(formatted);
       } catch (err) {
