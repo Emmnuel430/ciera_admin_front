@@ -19,6 +19,7 @@ const ProductsList = () => {
   const [sortOption, setSortOption] = useState("");
   const [sortedProducts, setSortedProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [, setTimeState] = useState(Date.now());
 
   // Récupérer la liste des produits (light)
   useEffect(() => {
@@ -40,7 +41,13 @@ const ProductsList = () => {
         setLoading(false);
       }
     };
+
     fetchProducts();
+    const interval = setInterval(() => {
+      setTimeState(Date.now()); // Met à jour l'état pour forcer un re-rendu
+    }, 59000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Grouper par type
@@ -171,7 +178,7 @@ const ProductsList = () => {
                                     className={
                                       prod.prix_promo
                                         ? "text-muted text-decoration-line-through"
-                                        : "text-dark fw-bold"
+                                        : "fw-bold"
                                     }
                                   >
                                     {parseFloat(prod.prix).toLocaleString()}{" "}
@@ -188,15 +195,13 @@ const ProductsList = () => {
                                 </div>
                               </div>
 
-                              {/* Si pièce */}
-                              {prod.piece && (
-                                <div className="mb-3">
-                                  <div className="fw-semibold">Quantité :</div>
-                                  <div className="text-body">
-                                    {prod.piece?.quantite} pièces disponibles
-                                  </div>
+                              <div className="mb-3">
+                                <div className="fw-semibold">Quantité :</div>
+                                <div className="text-body">
+                                  {prod.quantite ? prod.quantite : 0} pièce(s)
+                                  disponible(s)
                                 </div>
-                              )}
+                              </div>
 
                               {/* Code promo */}
                               {prod.codes_promo?.length > 0 && (

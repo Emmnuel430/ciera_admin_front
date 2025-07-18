@@ -14,6 +14,7 @@ const typeOptions = [
 
 const AddProduct = () => {
   const [types, setTypes] = useState([]);
+  const [categories, setCategories] = useState({});
   const [selectedType, setSelectedType] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,9 @@ const AddProduct = () => {
   const [product, setProduct] = useState({
     type_id: "",
     libelle: "",
+    marque: "",
+    modele: "",
+    quantite: "",
     prix: "",
     prix_promo: "",
     images: [],
@@ -57,6 +61,36 @@ const AddProduct = () => {
     fetchTypes();
   }, []);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetchWithToken(
+          `${process.env.REACT_APP_API_BASE_URL}/produits/categories`
+        );
+        const data = await res.json();
+        if (res.ok) {
+          // Grouper par slug de type
+          const grouped = {};
+          data.forEach((cat) => {
+            const key = cat.type?.slug || "autre";
+            if (!grouped[key]) grouped[key] = [];
+            grouped[key].push({
+              id: cat.id,
+              nom: cat.nom,
+              type_id: cat.type_id,
+            });
+          });
+
+          setCategories(grouped);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des catégories", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   // Gestion du select type
   const handleTypeChange = (option) => {
     setSelectedType(option);
@@ -76,14 +110,6 @@ const AddProduct = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  // Gestion images (multi)
-  //   const handleImagesChange = (e) => {
-  //     setProduct((prev) => ({
-  //       ...prev,
-  //       images: Array.from(e.target.files),
-  //     }));
-  //   };
 
   // Champs dynamiques selon type
   const handleDetailChange = (section, name, value) => {
@@ -126,10 +152,25 @@ const AddProduct = () => {
   const handleSubmit = async () => {
     setLoading(true);
     setError("");
+    if (
+      !product.type_id ||
+      !product.categorie_id ||
+      !product.libelle ||
+      !product.prix
+    ) {
+      setError("Type, catégorie, libellé et prix sont obligatoires.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("type_id", product.type_id);
+      formData.append("categorie_id", product.categorie_id);
       formData.append("libelle", product.libelle);
+      formData.append("marque", product.marque);
+      formData.append("modele", product.modele);
+      formData.append("quantite", product.quantite);
       formData.append("prix", product.prix);
       if (product.prix_promo) formData.append("prix_promo", product.prix_promo);
       formData.append("description", product.description || "");
@@ -148,7 +189,14 @@ const AddProduct = () => {
       }
       if (selectedType?.value === "vehicule") {
         Object.entries(product.vehicule).forEach(([k, v]) => {
-          if (v !== "") formData.append(`vehicule[${k}]`, v);
+          if (v !== "" && v !== null && v !== undefined) {
+            // Pour les booléens, envoie "1" ou "0"
+            if (typeof v === "boolean") {
+              formData.append(`vehicule[${k}]`, v ? "1" : "0");
+            } else {
+              formData.append(`vehicule[${k}]`, v);
+            }
+          }
         });
       }
 
@@ -191,143 +239,178 @@ const AddProduct = () => {
   const renderPieceFields = () => (
     <>
       <div className="mb-3">
-        <label>Marque</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Ex : Michellin"
-          value={product.piece.marque || ""}
-          onChange={(e) =>
-            handleDetailChange("piece", "marque", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="mb-3">
-        <label>Modèle</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Ex : XTT"
-          value={product.piece.modele || ""}
-          onChange={(e) =>
-            handleDetailChange("piece", "modele", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="mb-3">
-        <label>Catégorie</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Ex : Moteur, Freinage, Suspension..."
-          value={product.piece.categorie || ""}
-          onChange={(e) =>
-            handleDetailChange("piece", "categorie", e.target.value)
-          }
-        />
-      </div>
-
-      <div className="mb-3">
         <label>Poids (en KG)</label>
         <input
           type="number"
           className="form-control"
-          placeholder="Ex : 2.5 kg"
+          min={0}
+          placeholder="Ex : 2.5 kg (Optionnel - Tapez 1 si moins de 1 kg)"
           value={product.piece.poids || ""}
           onChange={(e) => handleDetailChange("piece", "poids", e.target.value)}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label>Quantité</label>
-        <input
-          type="number"
-          className="form-control"
-          placeholder="Ex : 10"
-          value={product.piece.quantite || ""}
-          onChange={(e) =>
-            handleDetailChange("piece", "quantite", e.target.value)
-          }
         />
       </div>
     </>
   );
 
+  const vehiculeFieldsConfig = [
+    {
+      label: "État",
+      name: "etat",
+      type: "select",
+      options: ["Neuf", "Quasi-neuf", "Bon état", "À réparer"],
+    },
+    {
+      label: "Date immatriculation",
+      name: "date_immatriculation",
+      type: "date",
+      max: new Date().toISOString().split("T")[0],
+    },
+    {
+      label: "Transmission",
+      name: "transmission",
+      type: "select",
+      options: ["Manuelle", "Automatique", "Séquentielle"],
+    },
+    {
+      label: "Carburant",
+      name: "carburant",
+      type: "select",
+      options: ["Essence", "Diesel", "Hybride", "Électrique", "GPL", "Autre"],
+    },
+    {
+      label: "Kilométrage",
+      name: "kilometrage",
+      type: "number",
+      min: 0,
+    },
+    { label: "Puissance", name: "puissance", type: "text" },
+    { label: "Cylindrée", name: "cylindree", type: "text" },
+    { label: "Nombre de places", name: "nb_places", type: "number", min: 1 },
+    { label: "Nombre de portes", name: "nb_portes", type: "number", min: 1 },
+    {
+      label: "Nombre de propriétaires",
+      name: "nb_proprietaires",
+      type: "number",
+      min: 0,
+    },
+    {
+      label: "Prochaine révision",
+      name: "prochaine_revision",
+      type: "date",
+      min: new Date().toISOString().split("T")[0],
+    },
+    { label: "Couleur", name: "couleur", type: "text" },
+    {
+      label: "Type d'entraînement",
+      name: "type_entraînement",
+      type: "select",
+      options: ["Traction avant", "Propulsion", "4X4"],
+    },
+    { label: "Consommation", name: "consommation", type: "text" },
+    { label: "Émission CO2", name: "emission_co2", type: "text" },
+    {
+      label: "Radar de recul",
+      name: "radar_recul",
+      type: "checkbox",
+    },
+    {
+      label: "Climatisation",
+      name: "climatisation",
+      type: "select",
+      options: ["Aucune", "Manuelle", "Automatique"],
+    },
+    {
+      label: "Équipements intérieurs (séparés par virgule)",
+      name: "equipements_interieurs",
+      type: "array",
+    },
+    {
+      label: "Équipements sécurité (séparés par virgule)",
+      name: "equipements_securite",
+      type: "array",
+    },
+  ];
+
   const renderVehiculeFields = () => (
     <>
-      <div className="mb-3">
-        <label>État</label>
-        <input
-          type="text"
-          className="form-control"
-          value={product.vehicule.etat || ""}
-          onChange={(e) =>
-            handleDetailChange("vehicule", "etat", e.target.value)
-          }
-        />
-      </div>
-      <div className="mb-3">
-        <label>Catégorie</label>
-        <input
-          type="text"
-          className="form-control"
-          value={product.vehicule.categorie || ""}
-          onChange={(e) =>
-            handleDetailChange("vehicule", "categorie", e.target.value)
-          }
-        />
-      </div>
-      <div className="mb-3">
-        <label>Date immatriculation</label>
-        <input
-          type="date"
-          className="form-control"
-          value={product.vehicule.date_immatriculation || ""}
-          onChange={(e) =>
-            handleDetailChange(
-              "vehicule",
-              "date_immatriculation",
-              e.target.value
-            )
-          }
-        />
-      </div>
-      <div className="mb-3">
-        <label>Transmission</label>
-        <input
-          type="text"
-          className="form-control"
-          value={product.vehicule.transmission || ""}
-          onChange={(e) =>
-            handleDetailChange("vehicule", "transmission", e.target.value)
-          }
-        />
-      </div>
-      <div className="mb-3">
-        <label>Carburant</label>
-        <input
-          type="text"
-          className="form-control"
-          value={product.vehicule.carburant || ""}
-          onChange={(e) =>
-            handleDetailChange("vehicule", "carburant", e.target.value)
-          }
-        />
-      </div>
-      <div className="mb-3">
-        <label>Kilométrage</label>
-        <input
-          type="number"
-          className="form-control"
-          value={product.vehicule.kilometrage || ""}
-          onChange={(e) =>
-            handleDetailChange("vehicule", "kilometrage", e.target.value)
-          }
-        />
-      </div>
-      {/* Ajoute d'autres champs si besoin */}
+      {vehiculeFieldsConfig.map((field) => {
+        const value = product.vehicule[field.name] ?? "";
+        if (field.type === "select") {
+          return (
+            <div className="mb-3" key={field.name}>
+              <label>{field.label}</label>
+              <select
+                className="form-select"
+                value={value}
+                onChange={(e) =>
+                  handleDetailChange("vehicule", field.name, e.target.value)
+                }
+              >
+                <option value="">-- Choisir --</option>
+                {field.options.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+        }
+        if (field.type === "checkbox") {
+          return (
+            <div className="mb-3 form-check" key={field.name}>
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id={field.name}
+                checked={!!value}
+                onChange={(e) =>
+                  handleDetailChange("vehicule", field.name, e.target.checked)
+                }
+              />
+              <label className="form-check-label" htmlFor={field.name}>
+                {field.label}
+              </label>
+            </div>
+          );
+        }
+
+        if (field.type === "array") {
+          return (
+            <div className="mb-3" key={field.name}>
+              <label>{field.label}</label>
+              <input
+                type="text"
+                className="form-control"
+                value={Array.isArray(value) ? value.join(", ") : value}
+                onChange={(e) =>
+                  handleDetailChange(
+                    "vehicule",
+                    field.name,
+                    e.target.value.split(",").map((v) => v.trim())
+                  )
+                }
+              />
+            </div>
+          );
+        }
+        // input classique
+        return (
+          <div className="mb-3" key={field.name}>
+            <label>{field.label}</label>
+            <input
+              type={field.type}
+              className="form-control"
+              min={field.min}
+              max={field.max}
+              value={value}
+              onChange={(e) =>
+                handleDetailChange("vehicule", field.name, e.target.value)
+              }
+            />
+          </div>
+        );
+      })}
     </>
   );
 
@@ -373,6 +456,29 @@ const AddProduct = () => {
                       </select>
                     </div>
                     <div className="mb-3">
+                      <label className="form-label">Catégorie *</label>
+                      <select
+                        className="form-select"
+                        value={product.categorie_id || ""}
+                        onChange={(e) =>
+                          setProduct((prev) => ({
+                            ...prev,
+                            categorie_id: parseInt(e.target.value),
+                          }))
+                        }
+                        disabled={!selectedType}
+                      >
+                        <option value="">Choisir une catégorie</option>
+                        {selectedType &&
+                          categories[selectedType.value]?.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                              {cat.nom}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
                       <label className="form-label">Libellé *</label>
                       <input
                         type="text"
@@ -386,9 +492,48 @@ const AddProduct = () => {
                     </div>
                     <div className="row">
                       <div className="col-md-6 mb-3">
+                        <label>Marque</label>
+                        <input
+                          name="marque"
+                          type="text"
+                          className="form-control"
+                          placeholder="Ex : Michellin (Optionnel)"
+                          value={product.marque || ""}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Modèle</label>
+                        <input
+                          name="modele"
+                          type="text"
+                          className="form-control"
+                          placeholder="Ex : XTT (Optionnel)"
+                          value={product.modele || ""}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label>Quantité</label>
+                      <input
+                        name="quantite"
+                        type="number"
+                        min={1}
+                        className="form-control"
+                        placeholder="Ex : 10 (Optionnel)"
+                        value={product.quantite || ""}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6 mb-3">
                         <label className="form-label">Prix (FCFA) *</label>
                         <input
                           type="number"
+                          min={100}
                           className="form-control"
                           name="prix"
                           placeholder="Ex : 15000"
@@ -401,6 +546,7 @@ const AddProduct = () => {
                         <label className="form-label">Prix promo</label>
                         <input
                           type="number"
+                          min={100}
                           className="form-control"
                           name="prix_promo"
                           placeholder="Ex : 12000 (laisser vide si pas de réduction)"
@@ -505,6 +651,7 @@ const AddProduct = () => {
                             type="number"
                             className="form-control"
                             placeholder="%"
+                            min={0}
                             value={cp.reduction}
                             onChange={(e) =>
                               handleCodePromoChange(
@@ -518,6 +665,7 @@ const AddProduct = () => {
                         <div className="col-md-3">
                           <input
                             type="number"
+                            min={100}
                             className="form-control"
                             placeholder="Remise (FCFA)"
                             value={cp.valeur_remise}
