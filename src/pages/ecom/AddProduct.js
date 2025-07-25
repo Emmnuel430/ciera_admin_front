@@ -724,9 +724,10 @@ const AddProduct = () => {
                 disabled={
                   loading ||
                   !selectedType ||
+                  !product.type_id ||
+                  !product.categorie_id ||
                   !product.libelle ||
-                  !product.prix ||
-                  !product.type_id
+                  !product.prix
                 }
               >
                 {loading ? (

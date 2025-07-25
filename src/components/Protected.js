@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Protected = ({ Cmp, adminOnly = false }) => {
+const Protected = ({ Cmp, adminOnly = false, devOnly = false }) => {
   const navigate = useNavigate();
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -48,8 +48,16 @@ const Protected = ({ Cmp, adminOnly = false }) => {
           throw new Error("Invalid user data");
         }
 
-        if (adminOnly && currentUser.role !== "super_admin") {
+        if (
+          adminOnly &&
+          currentUser.role !== "super_admin" &&
+          currentUser.role !== "dev"
+        ) {
           navigate("/access-denied");
+          return;
+        }
+        if (devOnly && currentUser.role !== "dev") {
+          navigate("/admin-gest/home");
           return;
         }
 
@@ -61,7 +69,7 @@ const Protected = ({ Cmp, adminOnly = false }) => {
     };
 
     checkUserInDB();
-  }, [adminOnly, navigate]);
+  }, [adminOnly, devOnly, navigate]);
 
   return <>{isAuthorized ? <Cmp /> : null}</>;
 };

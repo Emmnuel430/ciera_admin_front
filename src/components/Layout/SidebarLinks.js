@@ -11,7 +11,7 @@ const SidebarLinks = ({ user }) => {
 
   return (
     <div className="navbar-nav w-100">
-      {hasRole(["super_admin"]) && (
+      {hasRole(["super_admin", "dev"]) && (
         <>
           <Link
             to="/admin-gest/home"
@@ -38,20 +38,22 @@ const SidebarLinks = ({ user }) => {
             <i className="fa fa-users me-2"></i>
             <span className="text-body">Utilisateurs</span>
           </Link>
-
-          <Link
-            to="/admin-gest/produits"
-            className={`nav-link d-flex align-items-center ${
-              isActive("/admin-gest/produits") ||
-              isActive("/admin-gest/produit/add")
-                ? "active bg-body-secondary fw-bold"
-                : ""
-            }`}
-          >
-            <i className="fa fa-box-open me-2"></i>
-            <span className="text-body">Produits</span>
-          </Link>
         </>
+      )}
+
+      {hasRole(["dev"]) && (
+        <Link
+          to="/admin-gest/produits"
+          className={`nav-link d-flex align-items-center ${
+            isActive("/admin-gest/produits") ||
+            isActive("/admin-gest/produit/add")
+              ? "active bg-body-secondary fw-bold"
+              : ""
+          }`}
+        >
+          <i className="fa fa-box-open me-2"></i>
+          <span className="text-body">Produits</span>
+        </Link>
       )}
       <>
         <hr />
@@ -69,19 +71,21 @@ const SidebarLinks = ({ user }) => {
           <span className="text-body">Pages</span>
         </Link>
 
-        <Link
-          to="/admin-gest/settings"
-          className={`nav-link d-flex align-items-center ${
-            isActive("/admin-gest/settings")
-              ? "active bg-body-secondary fw-bold"
-              : ""
-          }`}
-        >
-          <i className="fa fa-cog me-2"></i>
-          <span className="text-body">
-            Infos <br /> Générales
-          </span>
-        </Link>
+        {hasRole(["dev"]) && (
+          <Link
+            to="/admin-gest/settings"
+            className={`nav-link d-flex align-items-center ${
+              isActive("/admin-gest/settings")
+                ? "active bg-body-secondary fw-bold"
+                : ""
+            }`}
+          >
+            <i className="fa fa-cog me-2"></i>
+            <span className="text-body">
+              Infos <br /> Générales
+            </span>
+          </Link>
+        )}
       </>
     </div>
   );

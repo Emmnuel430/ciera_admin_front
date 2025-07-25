@@ -18,9 +18,11 @@ const AddPage = () => {
     template: "default",
     order: 0,
     is_active: true,
-    // main_image: null,
     sections: [],
   });
+
+  const user = JSON.parse(sessionStorage.getItem("user-info"));
+  const role = user?.role;
 
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -130,21 +132,43 @@ const AddPage = () => {
     setPage({ ...page, sections: newSections });
   }; */
 
-  const sectionTypeVariants = {
-    hero: [
-      "default",
-      "split",
-      "split-inverse",
-      "minimal",
-      "carousel",
-      "localisation",
-      "info",
-      "info-inverse",
-    ],
-    grid: ["columns", "icons", "cards", "split", "split-dark", "sections"],
-    carousel: ["simple", "with-captions"],
-    faq: ["accordion", "list"],
-    calltoaction: ["centered", "split", "app", "newsletter", "contact"],
+  const templateTypeVariants = {
+    default: {
+      hero: [
+        "default",
+        "split",
+        "split-inverse",
+        "minimal",
+        "carousel",
+        "localisation",
+        "info",
+        "info-inverse",
+      ],
+      grid: ["columns", "icons", "cards", "split", "split-dark", "sections"],
+      carousel: ["simple", "with-captions"],
+      faq: ["accordion", "list"],
+      calltoaction: ["centered", "split", "app", "newsletter", "contact"],
+    },
+    avec_sidebar: {
+      hero: [
+        "default",
+        "split",
+        "split-inverse",
+        "minimal",
+        "carousel",
+        "localisation",
+        "info",
+        "info-inverse",
+      ],
+      grid: ["columns", "icons", "cards", "split", "split-dark", "sections"],
+      carousel: ["simple", "with-captions"],
+      faq: ["accordion", "list"],
+      calltoaction: ["centered", "split", "app", "newsletter", "contact"],
+    },
+    ecom: {
+      hero: ["with-filters"],
+      grid: ["two-cards", "categories", "latest-products"],
+    },
   };
 
   const faIcons = [
@@ -384,6 +408,7 @@ const AddPage = () => {
                 >
                   <option value="default">Default</option>
                   <option value="avec_sidebar">Avec sidebar</option>
+                  {role === "dev" && <option value="ecom">E-commerce</option>}
                   {/* <option value="pleine_largeur">Pleine largeur</option>
                    */}
                 </select>
@@ -494,20 +519,20 @@ const AddPage = () => {
                         onChange={(e) => {
                           const newType = e.target.value;
                           handleSectionChange(sIndex, "type", newType);
-                          if (
-                            !sectionTypeVariants[newType].includes(
-                              section.variant
-                            )
-                          ) {
-                            handleSectionChange(
-                              sIndex,
-                              "variant",
-                              sectionTypeVariants[newType][0]
-                            );
-                          }
+                          // Met à jour le variant si le type change
+                          const variants =
+                            templateTypeVariants[page.template]?.[newType] ||
+                            [];
+                          handleSectionChange(
+                            sIndex,
+                            "variant",
+                            variants[0] || ""
+                          );
                         }}
                       >
-                        {Object.keys(sectionTypeVariants).map((type) => (
+                        {Object.keys(
+                          templateTypeVariants[page.template] || {}
+                        ).map((type) => (
                           <option key={type} value={type}>
                             {type}
                           </option>
@@ -521,19 +546,22 @@ const AddPage = () => {
                         className="form-select"
                         value={
                           section.variant ||
-                          sectionTypeVariants[section.type]?.[0]
+                          (templateTypeVariants[page.template]?.[
+                            section.type
+                          ] || [])[0]
                         }
                         onChange={(e) =>
                           handleSectionChange(sIndex, "variant", e.target.value)
                         }
                       >
-                        {(sectionTypeVariants[section.type] || []).map(
-                          (variant) => (
-                            <option key={variant} value={variant}>
-                              {variant}
-                            </option>
-                          )
-                        )}
+                        {(
+                          templateTypeVariants[page.template]?.[section.type] ||
+                          []
+                        ).map((variant) => (
+                          <option key={variant} value={variant}>
+                            {variant}
+                          </option>
+                        ))}
                       </select>
                     </div>
 

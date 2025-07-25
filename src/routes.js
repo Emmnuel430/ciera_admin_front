@@ -32,10 +32,7 @@ const AppRoutes = () => {
         <Route path="/admin-gest" element={<Login />} />
 
         {/* ------------------------ */}
-        <Route
-          path="/admin-gest/home"
-          element={<Protected Cmp={Home} adminOnly />}
-        />
+        <Route path="/admin-gest/home" element={<Protected Cmp={Home} />} />
 
         {/* Utilisateurs (Super Admin uniquement) */}
         <Route
@@ -54,15 +51,15 @@ const AppRoutes = () => {
         {/* Produits (Super Admin uniquement) */}
         <Route
           path="/admin-gest/produit/add"
-          element={<Protected Cmp={AddProduct} adminOnly />}
+          element={<Protected Cmp={AddProduct} devOnly />}
         />
         <Route
           path="/admin-gest/produits"
-          element={<Protected Cmp={ProductsList} adminOnly />}
+          element={<Protected Cmp={ProductsList} devOnly />}
         />
         <Route
           path="/admin-gest/produits/edit/:id"
-          element={<Protected Cmp={ProductUpdate} adminOnly />}
+          element={<Protected Cmp={ProductUpdate} devOnly />}
         />
 
         {/* ------------------------ */}
@@ -71,7 +68,10 @@ const AppRoutes = () => {
         <Route path="/admin-gest/pages" element={<Pages />} />
 
         {/* Ajout d'une nouvelle page */}
-        <Route path="/admin-gest/pages/add" element={<AddPage />} />
+        <Route
+          path="/admin-gest/pages/add"
+          element={<Protected Cmp={AddPage} devOnly />}
+        />
 
         {/* Modification d'une page existante */}
         <Route path="/admin-gest/pages/edit/:id" element={<EditPage />} />
@@ -81,7 +81,7 @@ const AppRoutes = () => {
         {/* Setings */}
         <Route
           path="/admin-gest/settings"
-          element={<Protected Cmp={Settings} adminOnly />}
+          element={<Protected Cmp={Settings} devOnly />}
         />
 
         {/* Si l'URL n'est pas définie, renvoyer l'utilisateur vers la page de connexion */}

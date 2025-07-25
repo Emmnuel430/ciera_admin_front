@@ -113,6 +113,7 @@ const UserUpdate = () => {
   };
 
   const roles = [
+    { value: "dev", label: "Développeur" },
     { value: "super_admin", label: "Super Admin" },
     { value: "staff", label: "Staff" },
   ];

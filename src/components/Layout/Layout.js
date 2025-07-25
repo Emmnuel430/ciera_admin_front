@@ -59,7 +59,7 @@ const Layout = ({ children }) => {
         {/* Navbar en haut de la page */}
         <nav className="navbar navbar-expand bg-body navbar-body sticky-top px-4 py-0">
           {/* Logo ou icône en version mobile */}
-          <Link to="/home" className="navbar-brand d-flex d-lg-none me-4">
+          <Link to="/" className="navbar-brand d-flex d-lg-none me-4">
             <img
               src={logo} // Affichage du logo de l'application
               alt="Logo"

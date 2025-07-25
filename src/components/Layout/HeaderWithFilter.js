@@ -7,6 +7,7 @@ const HeaderWithFilter = ({
   link,
   linkText,
   linkText2,
+  active = false,
   filter,
   setFilter,
   filterOptions = [],
@@ -85,26 +86,28 @@ const HeaderWithFilter = ({
             ) : null}
           </div>
         )}
-        <div>
-          {linkText && (
-            <Link to={link} className="btn btn-primary me-2">
-              <span className="d-none d-sm-inline">{linkText}</span>
-              <span className="d-inline d-sm-none">+</span>
-            </Link>
-          )}
-          {onLinkClick && (
-            <button
-              className="btn btn-primary"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onLinkClick) onLinkClick();
-              }}
-            >
-              <span className="d-none d-sm-inline">{linkText2}</span>
-              <span className="d-inline d-sm-none">+</span>
-            </button>
-          )}
-        </div>
+        {active && (
+          <div>
+            {linkText && (
+              <Link to={link} className="btn btn-primary me-2">
+                <span className="d-none d-sm-inline">{linkText}</span>
+                <span className="d-inline d-sm-none">+</span>
+              </Link>
+            )}
+            {onLinkClick && (
+              <button
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onLinkClick) onLinkClick();
+                }}
+              >
+                <span className="d-none d-sm-inline">{linkText2}</span>
+                <span className="d-inline d-sm-none">+</span>
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Total et filtre */}
