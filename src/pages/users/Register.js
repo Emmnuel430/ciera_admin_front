@@ -18,6 +18,9 @@ const Register = () => {
   const [showModal, setShowModal] = useState(false); // Contrôle l'affichage du modal de confirmation
   const navigate = useNavigate(); // Hook pour la navigation
 
+  const user = JSON.parse(sessionStorage.getItem("user-info"));
+  const userRole = user?.role;
+
   // Récupération de l'utilisateur actuellement connecté depuis le sessionStorage
   const userInfo = JSON.parse(sessionStorage.getItem("user-info"));
   const userId = userInfo ? userInfo.id : null;
@@ -29,8 +32,9 @@ const Register = () => {
     return;
   }
 
+  // Ne montrer "dev" que si l'utilisateur a déjà ce rôle
   const roles = [
-    { value: "dev", label: "Développeur" },
+    ...(userRole === "dev" ? [{ value: "dev", label: "Développeur" }] : []),
     { value: "super_admin", label: "Super Admin" },
     { value: "staff", label: "Staff" },
   ];

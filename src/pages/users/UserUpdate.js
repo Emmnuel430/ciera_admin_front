@@ -22,6 +22,7 @@ const UserUpdate = () => {
 
   const userInfo = JSON.parse(sessionStorage.getItem("user-info")); // Récupérer les informations de l'utilisateur connecté
   const userId = userInfo ? userInfo.id : null; // Récupérer l'ID de l'utilisateur connecté
+  const userRole = user?.role;
 
   // Hook useEffect qui se déclenche une fois au montage du composant
   useEffect(() => {
@@ -113,7 +114,7 @@ const UserUpdate = () => {
   };
 
   const roles = [
-    { value: "dev", label: "Développeur" },
+    ...(userRole === "dev" ? [{ value: "dev", label: "Développeur" }] : []),
     { value: "super_admin", label: "Super Admin" },
     { value: "staff", label: "Staff" },
   ];
