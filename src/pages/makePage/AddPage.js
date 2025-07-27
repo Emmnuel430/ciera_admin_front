@@ -8,6 +8,7 @@ import ToastMessage from "../../components/Layout/ToastMessage";
 import { fetchWithToken } from "../../utils/fetchWithToken"; // Importation d'une fonction utilitaire pour les requêtes avec token
 import Select from "react-select";
 import useSelectTheme from "./useSelectTheme";
+import RichTextEditor from "../../components/others/RichTextEditor";
 
 const AddPage = () => {
   const { customTheme } = useSelectTheme();
@@ -144,8 +145,16 @@ const AddPage = () => {
         "info",
         "info-inverse",
       ],
-      grid: ["columns", "icons", "cards", "split", "split-dark", "sections"],
-      carousel: ["simple", "with-captions"],
+      grid: [
+        "columns",
+        "icons",
+        "cards",
+        "split",
+        "split-dark",
+        "sections",
+        "three-icons",
+      ],
+      carousel: ["simple", "link", "with-captions"],
       faq: ["accordion", "list"],
       calltoaction: ["centered", "split", "app", "newsletter", "contact"],
     },
@@ -161,13 +170,37 @@ const AddPage = () => {
         "info-inverse",
       ],
       grid: ["columns", "icons", "cards", "split", "split-dark", "sections"],
-      carousel: ["simple", "with-captions"],
+      carousel: ["simple", "link", "with-captions"],
       faq: ["accordion", "list"],
       calltoaction: ["centered", "split", "app", "newsletter", "contact"],
     },
     ecom: {
       hero: ["with-filters"],
       grid: ["two-cards", "categories", "latest-products"],
+    },
+    avec_sidebar_rdv: {
+      hero: [
+        "default",
+        "split",
+        "split-inverse",
+        "minimal",
+        "carousel",
+        "localisation",
+        "info",
+        "info-inverse",
+      ],
+      grid: [
+        "columns",
+        "icons",
+        "cards",
+        "split",
+        "split-dark",
+        "sections",
+        "three-icons",
+      ],
+      carousel: ["simple", "link", "with-captions"],
+      faq: ["accordion", "list"],
+      calltoaction: ["centered", "split", "app", "newsletter", "contact"],
     },
   };
 
@@ -409,6 +442,9 @@ const AddPage = () => {
                   <option value="default">Default</option>
                   <option value="avec_sidebar">Avec sidebar</option>
                   {role === "dev" && <option value="ecom">E-commerce</option>}
+                  {role === "dev" && (
+                    <option value="avec_sidebar_rdv">Avec sidebar (rdv)</option>
+                  )}
                   {/* <option value="pleine_largeur">Pleine largeur</option>
                    */}
                 </select>
@@ -567,12 +603,10 @@ const AddPage = () => {
 
                     <div className="mb-3">
                       <label className="form-label">Contenu</label>
-                      <textarea
-                        className="form-control"
-                        rows={3}
+                      <RichTextEditor
                         value={section.content}
-                        onChange={(e) =>
-                          handleSectionChange(sIndex, "content", e.target.value)
+                        onChange={(newContent) =>
+                          handleSectionChange(sIndex, "content", newContent)
                         }
                       />
                     </div>
@@ -723,16 +757,14 @@ const AddPage = () => {
 
                         <div className="mb-2">
                           <label className="form-label">Contenu</label>
-                          <textarea
-                            className="form-control"
-                            rows={2}
+                          <RichTextEditor
                             value={sub.content}
-                            onChange={(e) =>
+                            onChange={(newContent) =>
                               handleSubsectionChange(
                                 sIndex,
                                 subIndex,
                                 "content",
-                                e.target.value
+                                newContent
                               )
                             }
                           />

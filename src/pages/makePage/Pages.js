@@ -21,6 +21,7 @@ const Pages = () => {
   const [sortOption, setSortOption] = useState(""); // État pour l'option de tri
   const [sortedPages, setSortedPages] = useState([]); // Liste des pages triés
   const [searchQuery, setSearchQuery] = useState(""); // Requête de recherche pour filtrer les pages
+  const [, setTimeState] = useState(Date.now());
 
   const user = JSON.parse(sessionStorage.getItem("user-info"));
   const role = user?.role;
@@ -49,6 +50,11 @@ const Pages = () => {
     };
 
     fetchPages(); // Appel de la fonction pour récupérer les pages
+    const interval = setInterval(() => {
+      setTimeState(Date.now()); // Met à jour l'état pour forcer un re-rendu
+    }, 59000);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -146,10 +152,11 @@ const Pages = () => {
     page.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const visiblePages = filteredPage.filter((page) => {
-    if (page.template === "ecom" && role !== "dev") return false;
-    return true;
-  });
+  const templatesRestreints = ["ecom", "avec_sidebar_rdv"];
+
+  const visiblePages = filteredPage.filter(
+    (page) => !(templatesRestreints.includes(page.template) && role !== "dev")
+  );
 
   const groupedFilteredPages = groupPagesByTemplate(visiblePages);
   return (
@@ -271,7 +278,8 @@ const Pages = () => {
                                       {formatDateRelative(page.created_at)}
                                       <br />
                                       Dernière m-à-j :{" "}
-                                      {page.created_at === page.updated_at
+                                      {new Date(page.created_at).getTime() ===
+                                      new Date(page.updated_at).getTime()
                                         ? "--"
                                         : formatDateRelative(page.updated_at)}
                                     </div>

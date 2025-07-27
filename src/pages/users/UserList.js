@@ -132,7 +132,6 @@ const UserList = () => {
             />
             {/* Affichage de l'en-tête avec filtre et le bouton pour ajouter un utilisateur */}
             <HeaderWithFilter
-              active
               title="Utilisateurs"
               link="/admin-gest/register"
               linkText="Ajouter"

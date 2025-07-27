@@ -22,6 +22,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ProductsList from "./pages/ecom/ProductsList";
 import AddProduct from "./pages/ecom/AddProduct";
 import ProductUpdate from "./pages/ecom/ProductUpdate";
+import RdvList from "./pages/rdv/RdvList";
 
 const AppRoutes = () => {
   return (
@@ -78,6 +79,10 @@ const AppRoutes = () => {
 
         {/* ------------------------ */}
 
+        <Route
+          path="/admin-gest/rdvs"
+          element={<Protected Cmp={RdvList} adminOnly />}
+        />
         {/* Setings */}
         <Route
           path="/admin-gest/settings"

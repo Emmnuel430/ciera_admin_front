@@ -118,7 +118,6 @@ const ProductsList = () => {
               delay={300}
             />
             <HeaderWithFilter
-              active
               title="Produits"
               link="/admin-gest/produit/add"
               linkText="Ajouter"

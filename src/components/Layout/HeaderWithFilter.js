@@ -7,7 +7,6 @@ const HeaderWithFilter = ({
   link,
   linkText,
   linkText2,
-  active = false,
   filter,
   setFilter,
   filterOptions = [],
@@ -72,6 +71,10 @@ const HeaderWithFilter = ({
 
     sortDataList();
   }, [sortOption, dataList, alphaField, dateField, setSortedList]);
+
+  const user = JSON.parse(sessionStorage.getItem("user-info"));
+  const role = user?.role;
+  const active = role === "dev";
 
   return (
     <div>
