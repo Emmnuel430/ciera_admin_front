@@ -53,7 +53,7 @@ export const PlanningView = ({ events, onDeleteRequest }) => {
               {eventsOfDay.map((event) => (
                 <li
                   key={event.id}
-                  className="list-group-item d-flex justify-content-between align-items-start flex-column"
+                  className="list-group-item d-flex justify-content-between align-items-start flex-column  py-3"
                 >
                   <div>
                     <strong>
@@ -62,7 +62,8 @@ export const PlanningView = ({ events, onDeleteRequest }) => {
                     </strong>
                   </div>
                   <div className="text-muted">
-                    ({event.immat}) {event.marque} {event.modele}
+                    ({event.immat}) <strong>{event.marque}</strong>{" "}
+                    {event.modele}
                   </div>
                   <div className="mt-1">
                     Heure :{" "}
@@ -74,6 +75,10 @@ export const PlanningView = ({ events, onDeleteRequest }) => {
                       }
                     )}
                   </div>
+                  <div className="mt-1">
+                    Centre : <strong>{event.centre}</strong>
+                  </div>
+
                   <div className="mt-2 align-self-end d-flex gap-2">
                     <button
                       className="btn btn-sm btn-info"

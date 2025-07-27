@@ -66,6 +66,9 @@ export const CalendarView = ({ rdvs, onDeleteRequest }) => {
             <Modal.Title>Détails du rendez-vous</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <p className="text-center">
+              <strong>Centre :</strong> {selectedRdv.centre}
+            </p>
             <p>
               <strong>Nom :</strong> {selectedRdv.client_nom}
             </p>
