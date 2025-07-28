@@ -63,7 +63,7 @@ const Protected = ({ Cmp, adminOnly = false, devOnly = false }) => {
 
         setIsAuthorized(true);
       } catch (error) {
-        sessionStorage.removeItem("user-info");
+        sessionStorage.clear();
         navigate("/");
       }
     };
